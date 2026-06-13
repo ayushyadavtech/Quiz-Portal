@@ -2,3 +2,5 @@ __pycache__/
 *.pyc
 instance/
 .env
+quiz_app/__pycache__/
+quiz_app/instance/
