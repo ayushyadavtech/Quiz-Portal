@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+    <h2>Quiz</h2>
+    <div id="timer" style="background:#2c3e50; color:white; padding:10px 20px; border-radius:4px; font-size:18px; font-weight:bold;">
+        Time: <span id="time">10:00</span>
+    </div>
+</div>
+
+{% if questions %}
+<form method="POST" action="{{ url_for('submit') }}" id="quiz-form">
+    {% for q in questions %}
+    <div style="background:white; padding:25px; border-radius:8px; margin-bottom:20px; box-shadow:0 2px 10px rgba(0,0,0,0.1);">
+        <h4 style="margin-bottom:15px; color:#2c3e50;">{{ loop.index }}. {{ q.text }}</h4>
+        <div style="display:flex; flex-direction:column; gap:12px;">
+            <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
+                <input type="radio" name="{{ q.id }}" value="a" required> 
+                <span>A) {{ q.opt_a }}</span>
+            </label>
+            <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
+                <input type="radio" name="{{ q.id }}" value="b">
+                <span>B) {{ q.opt_b }}</span>
+            </label>
+            <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
+                <input type="radio" name="{{ q.id }}" value="c">
+                <span>C) {{ q.opt_c }}</span>
+            </label>
+            <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
+                <input type="radio" name="{{ q.id }}" value="d">
+                <span>D) {{ q.opt_d }}</span>
+            </label>
+        </div>
+    </div>
+    {% endfor %}
+    <button type="submit">Submit Quiz</button>
+</form>
+
+{% else %}
+<div style="background:white; padding:40px; border-radius:8px; text-align:center; box-shadow:0 2px 10px rgba(0,0,0,0.1);">
+    <h3 style="color:#888;">No questions available yet!</h3>
+    <p style="color:#aaa; margin-top:10px;">Please wait for admin to add questions.</p>
+</div>
+{% endif %}
+
+<!-- Timer Script -->
+<script>
+    var minutes = 5;
+    var seconds = 0;
+    var timer = setInterval(function() {
+        seconds--;
+        if (seconds < 0) {
+            seconds = 59;
+            minutes--;
+        }
+        if (minutes < 0) {
+            clearInterval(timer);
+            alert('Time is up! Submitting quiz...');
+            document.getElementById('quiz-form').submit();
+        }
+        document.getElementById('time').innerHTML = 
+            (minutes < 10 ? '0' : '') + minutes + ':' + 
+            (seconds < 10 ? '0' : '') + seconds;
+    }, 1000);
+</script>
+
+{% endblock %}

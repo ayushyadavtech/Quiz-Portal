@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+    <h2>Admin Dashboard</h2>
+    <a href="{{ url_for('add_question') }}" style="background:#2c3e50; color:white; padding:10px 20px; border-radius:4px; text-decoration:none;">+ Add Question</a>
+</div>
+
+<!-- Questions Table -->
+<h3 style="margin-bottom:10px;">All Questions</h3>
+<table style="width:100%; border-collapse:collapse; background:white; border-radius:8px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,0.1);">
+    <thead style="background:#2c3e50; color:white;">
+        <tr>
+            <th style="padding:12px; text-align:left;">#</th>
+            <th style="padding:12px; text-align:left;">Question</th>
+            <th style="padding:12px; text-align:left;">Answer</th>
+            <th style="padding:12px; text-align:left;">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for q in questions %}
+        <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:12px;">{{ loop.index }}</td>
+            <td style="padding:12px;">{{ q.text }}</td>
+            <td style="padding:12px; text-transform:uppercase;">{{ q.answer }}</td>
+            <td style="padding:12px;">
+                <a href="{{ url_for('delete_question', id=q.id) }}" 
+                style="color:red;" 
+                onclick="return confirm('Delete this question?')">Delete</a>
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="4" style="padding:20px; text-align:center; color:#888;">No questions added yet!</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- Results Table -->
+<h3 style="margin:30px 0 10px;">Student Results</h3>
+<table style="width:100%; border-collapse:collapse; background:white; border-radius:8px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,0.1);">
+    <thead style="background:#2c3e50; color:white;">
+        <tr>
+            <th style="padding:12px; text-align:left;">#</th>
+            <th style="padding:12px; text-align:left;">Student</th>
+            <th style="padding:12px; text-align:left;">Score</th>
+            <th style="padding:12px; text-align:left;">Total</th>
+            <th style="padding:12px; text-align:left;">Percentage</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for r in results %}
+        <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:12px;">{{ loop.index }}</td>
+            <td style="padding:12px;">{{ r.user.username }}</td>
+            <td style="padding:12px;">{{ r.score }}</td>
+            <td style="padding:12px;">{{ r.total }}</td>
+            <td style="padding:12px;">{{ ((r.score / r.total) * 100) | round(1) }}%</td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="5" style="padding:20px; text-align:center; color:#888;">No results yet!</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
